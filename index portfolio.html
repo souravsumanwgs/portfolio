@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourav Suman - Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Global styles for smooth scroll and font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Base colors for light mode, overridden by dark mode class on html */
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+
+        /* Dark mode base colors */
+        html.dark body {
+            background-color: #111827; /* gray-900 */
+            color: #f9fafb; /* gray-50 */
+        }
+
+        /* Hide scrollbar for a cleaner look, if desired */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0; /* Light track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* Light greyish thumb */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* Darker grey on hover */
+        }
+
+        /* Dark mode scrollbar */
+        .dark::-webkit-scrollbar-track {
+            background: #2d3748; /* Darker track */
+        }
+        .dark::-webkit-scrollbar-thumb {
+            background: #4a5568; /* Greyish thumb */
+            border-radius: 4px;
+        }
+        .dark::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* Lighter grey on hover */
+        }
+
+        /* Custom radial gradient for hero section - Light Mode */
+        .radial-gradient-hero-light {
+            background: radial-gradient(circle at center, rgba(0, 170, 255, 0.05) 0%, rgba(248, 250, 252, 0) 70%); /* Lighter blue, transparent white */
+        }
+        /* Custom radial gradient for hero section - Dark Mode */
+        .dark .radial-gradient-hero-blue {
+            background: radial-gradient(circle at center, rgba(0, 170, 255, 0.15) 0%, rgba(26, 32, 44, 0) 70%);
+        }
+
+        /* Highlight reveal animation for About Me paragraphs */
+        @keyframes highlight-reveal-light {
+            0% { background-position: -100% 0; } /* Start gradient off-screen left */
+            100% { background-position: 0% 0; }  /* End gradient at its normal position */
+        }
+
+        @keyframes highlight-reveal-dark {
+            0% { background-position: -100% 0; }
+            100% { background-position: 0% 0; }
+        }
+
+        .about-paragraph-hidden {
+            opacity: 1; /* Initially hidden */
+            transform: translateY(20px); /* Start slightly below */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smooth transition for reveal */
+        }
+
+        .about-paragraph-reveal {
+            background-repeat: no-repeat;
+            background-position: left center; /* Initial position for animation */
+            animation-fill-mode: forwards;
+            animation-name: highlight-reveal-light;
+            animation-duration: 1s; /* Adjust speed as needed */
+            animation-timing-function: ease-out;
+            animation-delay: var(--animation-delay, 0s);
+            background-image: linear-gradient(90deg, rgba(0, 170, 255, 0.15), rgba(0, 170, 255, 0.05)); /* Light mode highlight */
+            -webkit-background-clip: text; /* Required for text fill effect */
+            background-clip: text; /* Required for text fill effect */
+            color: transparent; /* Makes text transparent, revealing background */
+            opacity: 1; /* Ensure opacity is 1 for the reveal to work */
+            transform: translateY(0); /* Ensure it's in final position */
+        }
+
+        .dark .about-paragraph-reveal {
+            animation-name: highlight-reveal-dark;
+            background-image: linear-gradient(90deg, rgba(0, 170, 255, 0.25), rgba(0, 170, 255, 0.1)); /* Dark mode highlight */
+        }
+
+        /* Base styles for interactive cards/elements */
+        .interactive-card {
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+
+        .interactive-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(0, 170, 255, 0.4), 0 0 80px rgba(128, 0, 128, 0.3);
+            z-index: 1; /* Bring to front on hover */
+        }
+        .dark .interactive-card:hover {
+            box-shadow: 0 0 40px rgba(0, 170, 255, 0.6), 0 0 80px rgba(128, 0, 128, 0.4);
+        }
+
+        /* Specific styles for skill tags glow */
+        .skill-tag-interactive:hover {
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.2), 0 0 40px rgba(128, 0, 128, 0.15);
+        }
+        .dark .skill-tag-interactive:hover {
+             box-shadow: 0 0 20px rgba(0, 170, 255, 0.3), 0 0 40px rgba(128, 0, 128, 0.2);
+        }
+
+        /* Specific styles for YouTube button glow */
+        .youtube-button-interactive:hover {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2), 0 0 40px rgba(255, 0, 0, 0.15);
+        }
+        .dark .youtube-button-interactive:hover {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3), 0 0 40px rgba(255, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script>
+        // Data for the Portfolio (Centralized Content)
+        const portfolioData = {
+          name: "Sourav Suman",
+          role: "Data Science & LLM Developer | Career Counselor",
+          about: [
+            "I'm Sourav Suman, a dedicated Data Science & LLM Developer and the visionary founder of **The Aspiring Engineers (theaspiringengineers.com)**. My passion lies in building intelligent systems with AI and empowering the next generation of tech professionals through comprehensive mentorship.",
+            "As the leader of a dynamic team of 12-15 members at The Aspiring Engineers, I drive initiatives in career counseling, admissions, and internships, guiding students towards successful paths. My work extends to our YouTube channel, **@aspiringengineers7**, where I share insights and foster a community of learning.",
+            "My technical expertise is rooted in developing and deploying cutting-edge LLM-based solutions, including advanced document analysis and scalable RAG pipelines. I am committed to leveraging data science to create impactful applications and to continuously explore new frontiers in artificial intelligence."
+          ],
+          education: {
+            institution: "Haldia Institute of Technology, India",
+            degree: "B.Tech in CSE (Data Science)",
+            timeline: "2022–2026",
+          },
+          academicJourney: [
+            {
+              degree: "Bachelor of Technology in Computer Science Engineering (Data Science)",
+              institution: "Haldia Institute of Technology, India",
+              timeline: "2022 – 2026 (Expected)",
+              details: "Currently pursuing B.Tech with a focus on Data Science, achieving a CGPA of 7.7. Engaged in coursework covering advanced algorithms, machine learning, and artificial intelligence."
+            },
+            {
+              degree: "Higher Secondary (BSEB)",
+              institution: "+2 D S Sahodra School, India",
+              timeline: "2019 – 2021",
+              details: "Completed Higher Secondary education with an aggregate of 72.2%."
+            },
+            {
+              degree: "Matriculation (CBSE)",
+              institution: "Oxford Public School, India",
+              timeline: "2009 – 2019",
+              details: "Completed Matriculation with an aggregate of 78%."
+            },
+          ],
+          experience: [
+            {
+              company: "TCP Consultancy",
+              role: "Consultant",
+              timeline: "Apr 2023 – Present",
+              description: "Provided career counseling, admission support, and internship guidance to 100+ students.",
+            },
+            {
+              company: "Sabudh Foundation",
+              role: "Intern",
+              timeline: "Jan 2025 – Jun 2025",
+              description: "Developed LLM-based RAG pipelines, SQL query generators, and document analysis systems.",
+            },
+          ],
+          businessVentures: [
+            {
+              name: "The Aspiring Engineers",
+              role: "Founder",
+              timeline: "Jan 2024 – Present",
+              description: [
+                "Founded The Aspiring Engineers, a comprehensive student guidance platform dedicated to empowering aspiring professionals.",
+                "Lead a dedicated team of 12-15 members, providing strategic career counseling, direct admission support to top private engineering/medical colleges for students with varying entrance exam scores (JEE/WBJEE/NEET), and expert counseling for optimal college placements.",
+                "Actively developing new initiatives, including an upcoming internship program to provide hands-on project experience to students in the coming months.",
+                "Further extending our reach and impact through educational content on our YouTube channel, @aspiringengineers7, and our official website, theaspiringengineers.com."
+              ],
+              website: "https://www.theaspiringengineers.com",
+              youtube: "https://www.youtube.com/@aspiringengineers7",
+            },
+          ],
+          projects: [
+            {
+              name: "Document Analysis using LLMs",
+              timeline: "June 2025",
+              github: "https://github.com/souravsuman",
+              live: "#",
+              description: "Built intelligent multi-agent pipelines using LangChain, Whisper, Pinecone, etc.",
+            },
+            {
+              name: "House Price Prediction Model",
+              timeline: "Earlier",
+              github: "https://github.com/souravsuman",
+              live: "#",
+              description: "Trained ML model using Scikit-Learn with feature engineering and data visualization.",
+            },
+          ],
+          skills: [
+            "Python", "Java", "C", "SQL", "LangChain", "Whisper", "Ollama", "Pinecone", "Pandas", "NumPy", "Scikit-Learn", "MongoDB", "LLMs"
+          ],
+          achievements: [
+            "15th Rank – Hackfest 2025, IIT Dhanbad",
+            "State-level Football Player | Excelled in Chess",
+            "3rd Place – Intra-college Badminton",
+            "Student Committee Head – ISCIRF 2025",
+          ],
+          contact: {
+            email: "s.sumanwgs@gmail.com",
+            phone: "+91 9031901944",
+            github: "https://github.com/souravsumanwgs",
+            linkedin: "https://www.linkedin.com/in/souravsuman",
+          },
+        };
+
+        // --- Utility Functions for DOM Manipulation and Animations ---
+
+        // Function to create a DOM element with classes and attributes
+        function createElement(tag, classes = [], attributes = {}, children = []) {
+            const el = document.createElement(tag);
+            if (classes.length > 0) el.className = classes.join(' ');
+            for (const attr in attributes) {
+                el.setAttribute(attr, attributes[attr]);
+            }
+            children.forEach(child => {
+                if (typeof child === 'string') {
+                    el.appendChild(document.createTextNode(child));
+                } else if (child instanceof HTMLElement) {
+                    el.appendChild(child);
+                }
+            });
+            return el;
+        }
+
+        // Function to apply interactive card effects
+        function applyInteractiveCardEffects(element) {
+            element.classList.add('interactive-card');
+            element.addEventListener('mouseover', () => {
+                element.style.transform = 'scale(1.02)';
+                const isDarkMode = document.documentElement.classList.contains('dark');
+                element.style.boxShadow = isDarkMode
+                    ? '0 0 40px rgba(0, 170, 255, 0.6), 0 0 80px rgba(128, 0, 128, 0.4)'
+                    : '0 0 40px rgba(0, 170, 255, 0.4), 0 0 80px rgba(128, 0, 128, 0.3)';
+                element.style.zIndex = '1';
+            });
+            element.addEventListener('mouseout', () => {
+                element.style.transform = 'scale(1)';
+                element.style.boxShadow = 'none';
+                element.style.zIndex = 'auto';
+            });
+        }
+
+        // Function to apply skill tag effects
+        function applySkillTagEffects(element) {
+            element.classList.add('skill-tag-interactive');
+            element.addEventListener('mouseover', () => {
+                element.style.transform = 'scale(1.1)';
+                element.style.backgroundColor = '#2dd4bf'; // Tailwind teal-400
+                const isDarkMode = document.documentElement.classList.contains('dark');
+                element.style.boxShadow = isDarkMode
+                    ? '0 0 20px rgba(0, 170, 255, 0.3), 0 0 40px rgba(128, 0, 128, 0.2)'
+                    : '0 0 20px rgba(0, 170, 255, 0.2), 0 0 40px rgba(128, 0, 128, 0.15)';
+            });
+            element.addEventListener('mouseout', () => {
+                element.style.transform = 'scale(1)';
+                element.style.backgroundColor = ''; // Revert to Tailwind class
+                element.style.boxShadow = 'none';
+            });
+        }
+
+        // Function to apply YouTube button effects
+        function applyYoutubeButtonEffects(element) {
+            element.classList.add('youtube-button-interactive');
+            element.addEventListener('mouseover', () => {
+                element.style.transform = 'scale(1.05)';
+                const isDarkMode = document.documentElement.classList.contains('dark');
+                element.style.boxShadow = isDarkMode
+                    ? '0 0 20px rgba(255, 0, 0, 0.3), 0 0 40px rgba(255, 0, 0, 0.2)'
+                    : '0 0 20px rgba(255, 0, 0, 0.2), 0 0 40px rgba(255, 0, 0, 0.15)';
+            });
+            element.addEventListener('mouseout', () => {
+                element.style.transform = 'scale(1)';
+                element.style.boxShadow = 'none';
+            });
+        }
+
+
+        // --- Theme Management ---
+        let currentTheme = 'dark'; // Default theme
+
+        function loadTheme() {
+            if (localStorage.getItem('theme')) {
+                currentTheme = localStorage.getItem('theme');
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                currentTheme = 'dark';
+            } else {
+                currentTheme = 'light';
+            }
+            document.documentElement.classList.toggle('dark', currentTheme === 'dark');
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.classList.toggle('dark', currentTheme === 'dark');
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        // --- Section Rendering Functions ---
+
+        function renderNavbar(activeSection) {
+            const nav = createElement('nav', ['fixed', 'top-0', 'left-0', 'right-0', 'z-50', 'bg-white', 'bg-opacity-80', 'backdrop-blur-sm', 'p-4', 'shadow-lg', 'rounded-b-lg', 'dark:bg-gray-900', 'dark:bg-opacity-80']);
+            const container = createElement('div', ['container', 'mx-auto', 'flex', 'justify-between', 'items-center', 'px-4']);
+            
+            // Placeholder for left side
+            const leftPlaceholder = createElement('div', ['w-1/4']);
+
+            const navList = createElement('ul', ['hidden', 'md:flex', 'space-x-2']);
+            const navItems = [
+                { id: 'hero', label: 'Home' },
+                { id: 'about', label: 'About' },
+                { id: 'academic-journey', label: 'Academics' },
+                { id: 'experience', label: 'Experience' },
+                { id: 'business-ventures', label: 'Business' },
+                { id: 'projects', 'label': 'Projects' },
+                { id: 'achievements', label: 'Achievements' },
+                { id: 'skills', label: 'Skills' },
+                { id: 'contact', label: 'Contact' },
+            ];
+
+            navItems.forEach(item => {
+                const listItem = createElement('li');
+                const button = createElement('button', [
+                    'px-4', 'py-2', 'rounded-md', 'text-lg', 'font-medium', 'transition-all', 'duration-300'
+                ], {
+                    onclick: `document.getElementById('${item.id}').scrollIntoView({ behavior: 'smooth' });`
+                });
+
+                if (activeSection === item.id) {
+                    button.classList.add('bg-teal-100', 'text-teal-800', 'shadow-md', 'shadow-teal-500/50', 'dark:bg-teal-800', 'dark:text-white', 'dark:shadow-lg', 'dark:shadow-teal-500/50');
+                } else {
+                    button.classList.add('bg-transparent', 'text-gray-700', 'hover:bg-gray-100', 'hover:shadow-md', 'hover:shadow-teal-500/50', 'dark:text-gray-300', 'dark:hover:bg-gray-700', 'dark:hover:shadow-md', 'dark:hover:shadow-teal-500/50');
+                }
+                button.textContent = item.label;
+
+                // Add hover effects manually
+                button.addEventListener('mouseover', () => {
+                    button.style.transform = 'scale(1.05)';
+                });
+                button.addEventListener('mouseout', () => {
+                    button.style.transform = 'scale(1)';
+                });
+                button.addEventListener('mousedown', () => {
+                    button.style.transform = 'scale(0.95)';
+                });
+                button.addEventListener('mouseup', () => {
+                    button.style.transform = 'scale(1.05)'; // Revert to hover state or 1 if not hovered
+                });
+
+
+                listItem.appendChild(button);
+                navList.appendChild(listItem);
+            });
+
+            const themeToggleButton = createElement('button', [
+                'text-gray-700', 'dark:text-gray-300', 'text-2xl', 'p-2', 'rounded-full', 'hover:bg-gray-200', 'dark:hover:bg-gray-700', 'transition-colors', 'duration-300'
+            ], {
+                onclick: 'toggleTheme()'
+            });
+            themeToggleButton.innerHTML = currentTheme === 'dark' ? '☀️' : '🌙';
+
+            const mobileMenuIcon = createElement('div', ['md:hidden']);
+            const mobileButton = createElement('button', ['text-gray-800', 'dark:text-white', 'text-2xl']);
+            mobileButton.textContent = '☰';
+            mobileMenuIcon.appendChild(mobileButton);
+
+            container.appendChild(leftPlaceholder);
+            container.appendChild(navList);
+            container.appendChild(themeToggleButton);
+            container.appendChild(mobileMenuIcon);
+            nav.appendChild(container);
+
+            document.getElementById('root').querySelector('nav')?.remove(); // Remove existing nav if re-rendering
+            document.getElementById('root').prepend(nav);
+        }
+
+        function renderHero() {
+            const section = document.getElementById('hero');
+            section.innerHTML = ''; // Clear existing content
+
+            const mainDiv = createElement('div', ['flex', 'flex-col', 'items-center', 'justify-center', 'h-full', 'text-center', 'px-4']);
+            
+            const contentBox = createElement('div', [
+                'bg-white', 'p-6', 'md:p-8', 'rounded-lg', 'shadow-xl', 'max-w-2xl', 'mx-auto', 'border', 'border-transparent', 'transition-all', 'duration-300', 'dark:bg-gray-800', 'dark:border-transparent'
+            ]);
+            applyInteractiveCardEffects(contentBox); // Apply hover effects
+
+            const img = createElement('img', [
+                'rounded-full', 'w-32', 'h-32', 'md:w-48', 'md:h-48', 'object-cover', 'mb-6', 'shadow-lg', 'border-4', 'border-teal-400', 'mx-auto'
+            ], {
+                src: "https://placehold.co/200x200/007bff/ffffff?text=Sourav", // Placeholder image URL
+                alt: "Sourav Suman"
+            });
+            contentBox.appendChild(img);
+
+            const h1 = createElement('h1', ['text-5xl', 'md:text-8xl', 'font-extrabold', 'text-gray-800', 'dark:text-white', 'mb-4']);
+            const typedSpan = createElement('span', ['inline-block', 'w-2', 'bg-teal-600', 'dark:bg-teal-400', 'h-14', 'md:h-24', 'ml-2']);
+            h1.appendChild(typedSpan);
+            contentBox.appendChild(h1);
+
+            let i = 0;
+            const fullText = portfolioData.name;
+            function typeWriter() {
+                if (i < fullText.length) {
+                    h1.insertBefore(document.createTextNode(fullText.charAt(i)), typedSpan);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            }
+            typeWriter();
+
+            const pRole = createElement('p', ['text-xl', 'md:text-3xl', 'text-gray-700', 'dark:text-gray-300', 'font-light', 'mb-8']);
+            pRole.textContent = portfolioData.role;
+            contentBox.appendChild(pRole);
+
+            const buttonDiv = createElement('div', ['flex', 'flex-col', 'sm:flex-row', 'space-y-4', 'sm:space-y-0', 'sm:space-x-6', 'justify-center']);
+
+            const createButton = (href, text, isGradient = false, isDarkGradient = false) => {
+                const btn = createElement('a', [
+                    'font-bold', 'py-3', 'px-6', 'rounded-full', 'transition-all', 'duration-300', 'shadow-lg', 'text-lg'
+                ], {
+                    href: href,
+                    target: "_blank",
+                    rel: "noopener noreferrer"
+                });
+                btn.textContent = text;
+
+                if (isGradient) {
+                    // Fixed: Use spread operator to add multiple classes from an array
+                    btn.classList.add(...(isDarkGradient
+                        ? ['dark:from-blue-600', 'dark:to-blue-800', 'dark:hover:from-blue-700', 'dark:hover:to-blue-900']
+                        : ['from-blue-400', 'to-blue-600', 'hover:from-blue-500', 'hover:to-blue-700']
+                    ));
+                    btn.classList.add('bg-gradient-to-r', 'text-white');
+                } else {
+                    btn.classList.add('bg-gray-300', 'hover:bg-gray-400', 'text-gray-800', 'dark:bg-gray-700', 'dark:hover:bg-gray-600', 'dark:text-white');
+                }
+                
+                // Add hover effects manually
+                btn.addEventListener('mouseover', () => { btn.style.transform = 'scale(1.05)'; });
+                btn.addEventListener('mouseout', () => { btn.style.transform = 'scale(1)'; });
+                btn.addEventListener('mousedown', () => { btn.style.transform = 'scale(0.95)'; });
+                btn.addEventListener('mouseup', () => { btn.style.transform = 'scale(1.05)'; });
+
+                return btn;
+            };
+
+            buttonDiv.appendChild(createButton(portfolioData.contact.linkedin, 'LinkedIn', true, true));
+            buttonDiv.appendChild(createButton(portfolioData.contact.github, 'GitHub', false));
+            buttonDiv.appendChild(createButton(`mailto:${portfolioData.contact.email}`, 'Email Me', true, true));
+            
+            contentBox.appendChild(buttonDiv);
+            mainDiv.appendChild(contentBox);
+            section.appendChild(mainDiv);
+        }
+
+        function renderAbout(theme) {
+            const section = document.getElementById('about');
+            section.innerHTML = '';
+
+            const container = createElement('div', ['container', 'mx-auto', 'px-4', 'max-w-4xl']);
+            const h2 = createElement('h2', ['text-4xl', 'md:text-5xl', 'font-bold', 'text-teal-600', 'dark:text-teal-400', 'mb-8', 'text-center']);
+            h2.textContent = 'About Me';
+            container.appendChild(h2);
+
+            // Store paragraph elements to observe them
+            const paragraphElements = [];
+            portfolioData.about.forEach((paragraph, index) => {
+                // Ensure initial hidden state is applied via class
+                const p = createElement('p', [
+                    'text-lg', 'md:text-xl', 'leading-relaxed', 'mb-6', 'text-center', 'text-gray-700', 'dark:text-gray-300',
+                    'about-paragraph-hidden' // Add this class initially
+                ]);
+                p.innerHTML = paragraph;
+                p.style.setProperty('--animation-delay', `${index * 0.15}s`);
+                container.appendChild(p);
+                paragraphElements.push(p);
+            });
+
+            // Intersection Observer for reveal effect
+            paragraphElements.forEach((p, index) => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.remove('about-paragraph-hidden'); // Remove hidden class
+                            entry.target.classList.add('about-paragraph-reveal'); // Add reveal class
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5, rootMargin: '0px 0px -10% 0px' });
+                observer.observe(p);
+            });
+
+
+            const techStackDiv = createElement('div', [
+                'bg-white', 'p-6', 'md:p-8', 'rounded-lg', 'shadow-xl', 'mt-12', 'dark:bg-gray-800', 'border', 'border-transparent', 'transition-all', 'duration-300'
+            ]);
+            applyInteractiveCardEffects(techStackDiv);
+
+            const h3Tech = createElement('h3', ['text-2xl', 'md:text-3xl', 'font-semibold', 'text-gray-800', 'dark:text-white', 'mb-4', 'text-center']);
+            h3Tech.textContent = 'My Core Tech Stack';
+            techStackDiv.appendChild(h3Tech);
+
+            const skillsDiv = createElement('div', ['flex', 'flex-wrap', 'justify-center', 'gap-3', 'md:gap-4']);
+            portfolioData.skills.forEach((skill) => {
+                const span = createElement('span', [
+                    'bg-teal-100', 'text-teal-800', 'px-4', 'py-2', 'md:px-6', 'md:py-3', 'rounded-full', 'text-md', 'md:text-lg', 'font-medium', 'shadow-md', 'hover:scale-105', 'transition-transform', 'duration-300', 'cursor-pointer',
+                    'dark:bg-teal-700', 'dark:text-white', 'border', 'border-transparent'
+                ]);
+                span.textContent = skill;
+                applySkillTagEffects(span); // Apply skill tag effects
+                skillsDiv.appendChild(span);
+            });
+            techStackDiv.appendChild(skillsDiv);
+            container.appendChild(techStackDiv);
+
+            section.appendChild(container);
+        }
+
+        function renderAcademicJourney() {
+            const section = document.getElementById('academic-journey');
+            section.innerHTML = '';
+
+            const container = createElement('div', ['container', 'mx-auto', 'px-4', 'max-w-4xl']);
+            const h2 = createElement('h2', ['text-4xl', 'md:text-5xl', 'font-bold', 'text-teal-600', 'dark:text-teal-400', 'mb-8', 'text-center']);
+            h2.textContent = 'Academic Journey';
+            container.appendChild(h2);
+
+            const spaceY = createElement('div', ['space-y-8']);
+            portfolioData.academicJourney.forEach((entry, index) => {
+                const div = createElement('div', [
+                    'bg-white', 'p-6', 'md:p-8', 'rounded-lg', 'shadow-xl', 'dark:bg-gray-800', 'border', 'border-transparent', 'transition-all', 'duration-300'
+                ]);
+                applyInteractiveCardEffects(div);
+
+                const h3 = createElement('h3', ['text-2xl', 'md:text-3xl', 'font-semibold', 'text-gray-800', 'dark:text-white']);
+                h3.textContent = entry.degree;
+                div.appendChild(h3);
+
+                const p1 = createElement('p', ['text-lg', 'md:text-xl', 'text-gray-700', 'dark:text-gray-300', 'mb-2']);
+                p1.textContent = `${entry.institution} | ${entry.timeline}`;
+                div.appendChild(p1);
+
+                const p2 = createElement('p', ['text-md', 'md:text-lg', 'text-gray-600', 'dark:text-gray-400']);
+                p2.textContent = entry.details;
+                div.appendChild(p2);
+
+                spaceY.appendChild(div);
+            });
+            container.appendChild(spaceY);
+            section.appendChild(container);
+        }
+
+        function renderExperience() {
+            const section = document.getElementById('experience');
+            section.innerHTML = '';
+
+            const container = createElement('div', ['container', 'mx-auto', 'px-4', 'max-w-4xl']);
+            const h2 = createElement('h2', ['text-4xl', 'md:text-5xl', 'font-bold', 'text-teal-600', 'dark:text-teal-400', 'mb-8', 'text-center']);
+            h2.textContent = 'Work Experience';
+            container.appendChild(h2);
+
+            const spaceY = createElement('div', ['space-y-8']);
+            portfolioData.experience.forEach((exp, index) => {
+                const div = createElement('div', [
+                    'bg-white', 'p-6', 'md:p-8', 'rounded-lg', 'shadow-xl', 'dark:bg-gray-800', 'border', 'border-transparent', 'transition-all', 'duration-300'
+                ]);
+                applyInteractiveCardEffects(div);
+
+                const h3 = createElement('h3', ['text-2xl', 'md:text-3xl', 'font-semibold', 'text-gray-800', 'dark:text-white']);
+                h3.textContent = exp.role;
+                div.appendChild(h3);
+
+                const p1 = createElement('p', ['text-lg', 'md:text-xl', 'text-gray-700', 'dark:text-gray-300', 'mb-2']);
+                p1.textContent = `${exp.company} | ${exp.timeline}`;
+                div.appendChild(p1);
+
+                const p2 = createElement('p', ['text-md', 'md:text-lg', 'text-gray-600', 'dark:text-gray-400']);
+                p2.textContent = exp.description;
+                div.appendChild(p2);
+
+                spaceY.appendChild(div);
+            });
+            container.appendChild(spaceY);
+            section.appendChild(container);
+        }
+
+        function renderBusinessPortfolio() {
+            const section = document.getElementById('business-ventures');
+            section.innerHTML = '';
+
+            const container = createElement('div', ['container', 'mx-auto', 'px-4', 'max-w-4xl']);
+            const h2 = createElement('h2', ['text-4xl', 'md:text-5xl', 'font-bold', 'text-teal-600', 'dark:text-teal-400', 'mb-8', 'text-center']);
+            h2.textContent = 'Business Ventures';
+            container.appendChild(h2);
+
+            const spaceY = createElement('div', ['space-y-8']);
+            portfolioData.businessVentures.forEach((venture, index) => {
+                const div = createElement('div', [
+                    'bg-white', 'p-6', 'md:p-8', 'rounded-lg', 'shadow-xl', 'dark:bg-gray-800', 'border', 'border-transparent', 'transition-all', 'duration-300'
+                ]);
+                applyInteractiveCardEffects(div);
+
+                const h3 = createElement('h3', ['text-2xl', 'md:text-3xl', 'font-semibold', 'text-gray-800', 'dark:text-white']);
+                h3.textContent = venture.name;
+                div.appendChild(h3);
+
+                const p1 = createElement('p', ['text-xl', 'text-gray-700', 'dark:text-gray-300', 'mb-2']);
+                p1.textContent = `${venture.role} | ${venture.timeline}`;
+                div.appendChild(p1);
+
+                venture.description.forEach(paraText => {
+                    const p = createElement('p', ['text-md', 'md:text-lg', 'text-gray-600', 'dark:text-gray-400', 'mb-2']);
+                    p.innerHTML = paraText;
+                    div.appendChild(p);
+                });
+
+                const linkDiv = createElement('div', ['flex', 'flex-wrap', 'items-center', 'gap-4', 'mt-4']);
+                if (venture.website) {
+                    const websiteLink = createElement('a', [
+                        'px-4', 'py-2', 'rounded-md', 'text-md', 'font-medium', 'transition-all', 'duration-300',
+                        'bg-teal-100', 'text-teal-800', 'shadow-md', 'shadow-teal-500/50', 'dark:bg-teal-700', 'dark:text-white', 'dark:shadow-lg', 'dark:shadow-teal-500/50'
+                    ], {
+                        href: venture.website,
+                        target: "_blank",
+                        rel: "noopener noreferrer"
+                    });
+                    websiteLink.textContent = 'Visit Website';
+                    applyInteractiveCardEffects(websiteLink);
+                    linkDiv.appendChild(websiteLink);
+                }
+                if (venture.youtube) {
+                    const youtubeLink = createElement('a', [
+                        'px-4', 'py-2', 'rounded-md', 'text-md', 'font-medium', 'transition-all', 'duration-300', 'flex', 'items-center', 'space-x-2',
+                        'bg-red-100', 'text-red-800', 'shadow-md', 'shadow-red-500/50', 'dark:bg-red-700', 'dark:text-white', 'dark:shadow-lg', 'dark:shadow-red-500/50'
+                    ], {
+                        href: venture.youtube,
+                        target: "_blank",
+                        rel: "noopener noreferrer"
+                    });
+                    youtubeLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube"><path d="M2.8 5.7a4.9 4.9 0 0 1 4.7-4.7h9c1.4 0 2.6.8 3.2 2l.3.8c.4 1.2.6 2.5.6 3.8v2.6c0 1.3-.2 2.6-.6 3.8l-.3.8c-.6 1.2-1.8 2-3.2 2h-9c-1.4 0-2.6-.8-3.2-2l-.3-.8c-.4-1.2-.6-2.5-.6-3.8v-2.6c0-1.3.2-2.6.6-3.8z"/><path d="m10 15 5-3-5-3z"/></svg><span>YouTube Channel</span>`;
+                    applyYoutubeButtonEffects(youtubeLink);
+                    linkDiv.appendChild(youtubeLink);
+                }
+                div.appendChild(linkDiv);
+                spaceY.appendChild(div);
+            });
+            container.appendChild(spaceY);
+            section.appendChild(container);
+        }
+
+        function renderProjects() {
+            const section = document.getElementById('projects');
+            section.innerHTML = '';
+
+            const container = createElement('div', ['container', 'mx-auto', 'px-4', 'max-w-6xl']);
+            const h2 = createElement('h2', ['text-4xl', 'md:text-5xl', 'font-bold', 'text-teal-600', 'dark:text-teal-400', 'mb-8', 'text-center']);
+            h2.textContent = 'Projects';
+            container.appendChild(h2);
+
+            const grid = createElement('div', ['grid', 'grid-cols-1', 'md:grid-cols-2', 'gap-8']);
+            
+            portfolioData.projects.forEach((project, index) => {
+                const projectCard = createElement('div', [
+                    'bg-white', 'p-6', 'md:p-8', 'rounded-lg', 'shadow-xl', 'flex', 'flex-col', 'justify-between',
+                    'dark:bg-gray-800', 'border', 'border-transparent', 'transition-all', 'duration-300'
+                ]);
+                applyInteractiveCardEffects(projectCard);
+
+                const projectContent = createElement('div');
+                const h3 = createElement('h3', ['text-2xl', 'md:text-3xl', 'font-semibold', 'text-gray-800', 'dark:text-white', 'mb-2']);
+                h3.textContent = project.name;
+                projectContent.appendChild(h3);
+
+                const pTimeline = createElement('p', ['text-md', 'md:text-lg', 'text-gray-600', 'dark:text-gray-400', 'mb-4']);
+                pTimeline.textContent = project.timeline;
+                projectContent.appendChild(pTimeline);
+
+                const pDesc = createElement('p', ['text-md', 'md:text-lg', 'text-gray-700', 'dark:text-gray-300', 'mb-6']);
+                pDesc.textContent = project.description;
+                projectContent.appendChild(pDesc);
+                projectCard.appendChild(projectContent);
+
+                const buttonDiv = createElement('div', ['flex', 'flex-wrap', 'items-center', 'gap-4', 'mt-auto']);
+                if (project.github) {
+                    const githubLink = createElement('a', [
+                        'text-teal-600', 'hover:text-teal-700', 'font-medium', 'transition-colors', 'duration-300', 'text-md', 'md:text-lg',
+                        'dark:text-teal-400', 'dark:hover:text-teal-300'
+                    ], {
+                        href: project.github,
+                        target: "_blank",
+                        rel: "noopener noreferrer"
+                    });
+                    githubLink.textContent = 'GitHub';
+                    buttonDiv.appendChild(githubLink);
+                }
+                if (project.live && project.live !== '#') {
+                    const liveLink = createElement('a', [
+                        'text-teal-600', 'hover:text-teal-700', 'font-medium', 'transition-colors', 'duration-300', 'text-md', 'md:text-lg',
+                        'dark:text-teal-400', 'dark:hover:text-teal-300'
+                    ], {
+                        href: project.live,
+                        target: "_blank",
+                        rel: "noopener noreferrer"
+                    });
+                    liveLink.textContent = 'Live Demo';
+                    buttonDiv.appendChild(liveLink);
+                }
+
+                const insightsButton = createElement('button', [
+                    'ml-auto', 'bg-teal-600', 'hover:bg-teal-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded-full', 'transition-colors', 'duration-300', 'flex', 'items-center', 'justify-center', 'text-sm', 'md:text-base',
+                    'dark:bg-teal-600', 'dark:hover:bg-teal-700'
+                ]);
+                insightsButton.innerHTML = '✨ Get Insights';
+                buttonDiv.appendChild(insightsButton);
+
+                const insightsResponseDiv = createElement('div', [
+                    'mt-4', 'p-4', 'bg-gray-100', 'rounded-lg', 'text-gray-700', 'text-sm', 'md:text-base', 'dark:bg-gray-700', 'dark:text-gray-200'
+                ], { style: 'opacity: 0; height: 0; overflow: hidden;' });
+                const insightsTitle = createElement('h4', ['font-semibold', 'text-teal-600', 'dark:text-teal-300', 'mb-2']);
+                insightsTitle.textContent = 'AI-Generated Insights:';
+                insightsResponseDiv.appendChild(insightsTitle);
+                projectCard.appendChild(insightsResponseDiv);
+
+                let isLoading = false;
+                insightsButton.addEventListener('click', async () => {
+                    if (isLoading) return;
+                    isLoading = true;
+                    insightsButton.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+
+                    const prompt = `Given the following project description, provide 2-3 key takeaways or potential future enhancements for this project. Keep it concise and under 100 words. Format as bullet points:\n\n"${project.description}"`;
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // Canvas will automatically provide it in runtime
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            insightsResponseDiv.innerHTML = `<h4 class="font-semibold text-teal-600 dark:text-teal-300 mb-2">AI-Generated Insights:</h4>${text.replace(/\n/g, '<br/>')}`;
+                            insightsResponseDiv.style.opacity = '1';
+                            insightsResponseDiv.style.height = 'auto'; // Animate height
+                        } else {
+                            insightsResponseDiv.innerHTML = `<h4 class="font-semibold text-teal-600 dark:text-teal-300 mb-2">AI-Generated Insights:</h4>Failed to generate insights. Please try again.`;
+                            insightsResponseDiv.style.opacity = '1';
+                            insightsResponseDiv.style.height = 'auto';
+                        }
+                    } catch (error) {
+                        console.error("Error calling Gemini API:", error);
+                        insightsResponseDiv.innerHTML = `<h4 class="font-semibold text-teal-600 dark:text-teal-300 mb-2">AI-Generated Insights:</h4>An error occurred while fetching insights.`;
+                        insightsResponseDiv.style.opacity = '1';
+                        insightsResponseDiv.style.height = 'auto';
+                    } finally {
+                        isLoading = false;
+                        insightsButton.innerHTML = '✨ Get Insights';
+                    }
+                });
+
+                projectCard.appendChild(buttonDiv);
+                grid.appendChild(projectCard);
+            });
+            container.appendChild(grid);
+            section.appendChild(container);
+        }
+
+        function renderAchievements() {
+            const section = document.getElementById('achievements');
+            section.innerHTML = '';
+
+            const container = createElement('div', ['container', 'mx-auto', 'px-4', 'max-w-6xl']);
+            const h2 = createElement('h2', ['text-4xl', 'md:text-5xl', 'font-bold', 'text-teal-600', 'dark:text-teal-400', 'mb-8', 'text-center']);
+            h2.textContent = 'Achievements';
+            container.appendChild(h2);
+
+            const grid = createElement('div', ['grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-6']);
+            portfolioData.achievements.forEach((achievement, index) => {
+                const div = createElement('div', [
+                    'bg-white', 'p-6', 'rounded-lg', 'shadow-xl', 'flex', 'flex-col', 'items-center', 'text-center',
+                    'dark:bg-gray-800', 'border', 'border-transparent', 'transition-all', 'duration-300'
+                ]);
+                applyInteractiveCardEffects(div);
+
+                const spanIcon = createElement('span', ['text-teal-600', 'dark:text-teal-400', 'text-4xl', 'mb-3']);
+                spanIcon.textContent = '🌟';
+                div.appendChild(spanIcon);
+
+                const p = createElement('p', ['text-lg', 'text-gray-700', 'dark:text-gray-300', 'font-medium']);
+                p.textContent = achievement;
+                div.appendChild(p);
+
+                grid.appendChild(div);
+            });
+            container.appendChild(grid);
+            section.appendChild(container);
+        }
+
+        function renderSkills() {
+            const section = document.getElementById('skills');
+            section.innerHTML = '';
+
+            const container = createElement('div', ['container', 'mx-auto', 'px-4', 'max-w-4xl']);
+            const h2 = createElement('h2', ['text-4xl', 'md:text-5xl', 'font-bold', 'text-teal-600', 'dark:text-teal-400', 'mb-8', 'text-center']);
+            h2.textContent = 'Skills';
+            container.appendChild(h2);
+
+            const flexDiv = createElement('div', ['flex', 'flex-wrap', 'justify-center', 'gap-3', 'md:gap-4']);
+            portfolioData.skills.forEach((skill) => {
+                const span = createElement('span', [
+                    'bg-teal-100', 'text-teal-800', 'px-4', 'py-2', 'md:px-6', 'md:py-3', 'rounded-full', 'text-md', 'md:text-lg', 'font-medium', 'shadow-md', 'hover:scale-105', 'transition-transform', 'duration-300', 'cursor-pointer',
+                    'dark:bg-teal-700', 'dark:text-white', 'border', 'border-transparent'
+                ]);
+                span.textContent = skill;
+                applySkillTagEffects(span);
+                flexDiv.appendChild(span);
+            });
+            container.appendChild(flexDiv);
+            section.appendChild(container);
+        }
+
+        function renderContact() {
+            const section = document.getElementById('contact');
+            section.innerHTML = '';
+
+            const container = createElement('div', ['container', 'mx-auto', 'px-4', 'max-w-4xl', 'text-center']);
+            const h2 = createElement('h2', ['text-4xl', 'md:text-5xl', 'font-bold', 'text-teal-600', 'dark:text-teal-400', 'mb-8']);
+            h2.textContent = 'Get In Touch';
+            container.appendChild(h2);
+
+            const pIntro = createElement('p', ['text-lg', 'md:text-xl', 'text-gray-700', 'dark:text-gray-300', 'mb-8']);
+            pIntro.textContent = "I'm always open to new opportunities and collaborations. Feel free to reach out!";
+            container.appendChild(pIntro);
+
+            // Contact Form
+            const formDiv = createElement('div', [
+                'bg-white', 'p-6', 'md:p-8', 'rounded-lg', 'shadow-xl', 'max-w-2xl', 'mx-auto', 'border', 'border-transparent', 'transition-all', 'duration-300',
+                'dark:bg-gray-800', 'dark:border-transparent', 'mb-12'
+            ]);
+            applyInteractiveCardEffects(formDiv);
+
+            const h3Form = createElement('h3', ['text-3xl', 'font-semibold', 'text-gray-800', 'dark:text-white', 'mb-6', 'text-center']);
+            h3Form.textContent = 'Let’s start a project together';
+            formDiv.appendChild(h3Form);
+
+            const form = createElement('form', ['space-y-6']);
+            
+            const createFormField = (id, type, labelText, placeholder) => {
+                const div = createElement('div');
+                const label = createElement('label', ['block', 'text-lg', 'font-medium', 'text-gray-700', 'dark:text-gray-300', 'text-left', 'mb-2'], { htmlFor: id });
+                label.textContent = labelText;
+                div.appendChild(label);
+
+                let input;
+                if (type === 'textarea') {
+                    input = createElement('textarea', [
+                        'w-full', 'p-3', 'rounded-md', 'bg-gray-100', 'text-gray-800', 'border', 'border-gray-300', 'focus:outline-none', 'focus:border-teal-600', 'resize-y',
+                        'dark:bg-gray-700', 'dark:text-white', 'dark:border-gray-600', 'dark:focus:border-teal-400'
+                    ], { id: id, name: id, rows: 5, placeholder: placeholder, required: true });
+                } else {
+                    input = createElement('input', [
+                        'w-full', 'p-3', 'rounded-md', 'bg-gray-100', 'text-gray-800', 'border', 'border-gray-300', 'focus:outline-none', 'focus:border-teal-600',
+                        'dark:bg-gray-700', 'dark:text-white', 'dark:border-gray-600', 'dark:focus:border-teal-400'
+                    ], { type: type, id: id, name: id, placeholder: placeholder, required: true });
+                }
+                div.appendChild(input);
+                return div;
+            };
+
+            form.appendChild(createFormField('fullName', 'text', 'Full Name', 'Your Full Name'));
+            form.appendChild(createFormField('email', 'email', 'Email', 'Your Email Address'));
+            form.appendChild(createFormField('message', 'textarea', 'Message', 'Tell me about your project or inquiry...'));
+
+            const submitButton = createElement('button', [
+                'w-full', 'bg-gradient-to-r', 'from-teal-500', 'to-teal-700', 'hover:from-teal-600', 'hover:to-teal-800', 'text-white', 'font-bold', 'py-3', 'px-6', 'rounded-md', 'transition-all', 'duration-300', 'shadow-lg', 'text-lg',
+                'dark:from-teal-600', 'dark:to-teal-800', 'dark:hover:from-teal-700', 'dark:hover:to-teal-900'
+            ], { type: 'submit' });
+            submitButton.textContent = 'Submit';
+            form.appendChild(submitButton);
+            formDiv.appendChild(form);
+            container.appendChild(formDiv);
+
+            // Individual Contact Boxes
+            const contactBoxesDiv = createElement('div', ['flex', 'flex-col', 'md:flex-row', 'md:justify-center', 'md:space-x-8', 'space-y-6', 'md:space-y-0', 'mt-8']);
+
+            const createContactBox = (iconHtml, text, href, isSocial = false) => {
+                const box = createElement('a', [
+                    'bg-white', 'p-4', 'rounded-lg', 'shadow-md', 'flex', 'flex-col', 'items-center', 'justify-center', 'space-y-2',
+                    'dark:bg-gray-800', 'border', 'border-transparent', 'transition-all', 'duration-300'
+                ], { href: href, target: "_blank", rel: "noopener noreferrer" });
+                applyInteractiveCardEffects(box);
+
+                const iconSpan = createElement('span', ['text-gray-700', 'dark:text-gray-300', 'text-3xl']);
+                iconSpan.innerHTML = iconHtml;
+                box.appendChild(iconSpan);
+
+                const textSpan = createElement('span', ['text-lg', 'text-gray-800', 'dark:text-white']);
+                textSpan.textContent = text;
+                box.appendChild(textSpan);
+
+                return box;
+            };
+
+            contactBoxesDiv.appendChild(createContactBox('📞', portfolioData.contact.phone, `tel:${portfolioData.contact.phone}`));
+            contactBoxesDiv.appendChild(createContactBox('�', portfolioData.contact.email, `mailto:${portfolioData.contact.email}`));
+            contactBoxesDiv.appendChild(createContactBox(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github text-gray-700 dark:text-gray-300"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.44-.78-3.46 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.55 1.02-.9 2.22-.78 3.47 0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-5-2"/><path d="M12 11V7"/></svg>`,
+                'GitHub',
+                portfolioData.contact.github,
+                true
+            ));
+            contactBoxesDiv.appendChild(createContactBox(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin text-gray-700 dark:text-gray-300"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>`,
+                'LinkedIn',
+                portfolioData.contact.linkedin,
+                true
+            ));
+
+            container.appendChild(contactBoxesDiv);
+            section.appendChild(container);
+        }
+
+        function renderFooter() {
+            const footer = createElement('footer', ['py-8', 'text-center', 'text-gray-600', 'dark:text-gray-500', 'text-sm']);
+            const p = createElement('p');
+            p.textContent = `© ${new Date().getFullYear()} Sourav Suman. All rights reserved.`;
+            footer.appendChild(p);
+            document.body.appendChild(footer);
+        }
+
+        // --- Main Application Logic ---
+        function initializePortfolio() {
+            loadTheme();
+
+            const appDiv = document.getElementById('root');
+            const mainContent = createElement('main', ['pt-20']);
+
+            const sections = [
+                { id: 'hero', renderer: renderHero },
+                { id: 'about', renderer: renderAbout },
+                { id: 'academic-journey', renderer: renderAcademicJourney },
+                { id: 'experience', renderer: renderExperience },
+                { id: 'business-ventures', renderer: renderBusinessPortfolio },
+                { id: 'projects', renderer: renderProjects },
+                { id: 'achievements', renderer: renderAchievements },
+                { id: 'skills', renderer: renderSkills },
+                { id: 'contact', renderer: renderContact }
+            ];
+
+            sections.forEach(s => {
+                const sectionEl = createElement('section', [
+                    'min-h-screen', 'py-20', 'flex', 'flex-col', 'justify-center', 'relative', 'overflow-hidden',
+                    'bg-gradient-to-br', 'from-blue-100', 'via-white', 'to-blue-100', 'dark:from-blue-950', 'dark:via-gray-950', 'dark:to-blue-950'
+                ], { id: s.id });
+
+                const radialGradientDiv = createElement('div', ['absolute', 'inset-0', 'radial-gradient-hero-light', 'dark:radial-gradient-hero-blue']);
+                sectionEl.appendChild(radialGradientDiv);
+
+                const contentWrapper = createElement('div', ['relative', 'z-10', 'w-full']);
+                sectionEl.appendChild(contentWrapper);
+
+                mainContent.appendChild(sectionEl);
+            });
+            appDiv.appendChild(mainContent);
+            renderFooter();
+
+            sections.forEach(s => {
+                // Pass theme to About component specifically
+                if (s.id === 'about') {
+                    s.renderer({ theme: currentTheme });
+                } else {
+                    s.renderer();
+                }
+            });
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-30% 0px -70% 0px',
+                threshold: 0,
+            };
+
+            const sectionElements = sections.map(s => document.getElementById(s.id));
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        renderNavbar(entry.target.id);
+                    }
+                });
+            }, observerOptions);
+
+            sectionElements.forEach(el => {
+                if (el) observer.observe(el);
+            });
+
+            renderNavbar('hero');
+        }
+
+        // Initialize the portfolio when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', initializePortfolio);
+
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'theme') {
+                loadTheme();
+            }
+        });
+    </script>
+</body>
+</html>
+�
